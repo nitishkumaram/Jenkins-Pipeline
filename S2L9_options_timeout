@@ -1,0 +1,17 @@
+pipeline{
+    agent any
+
+    stages{
+        stage('options_timeout'){
+
+            options{
+                timeout(time: 1, unit: 'SECONDS')
+            }
+
+            steps{
+                echo "timeout"
+                sleep 2
+            }
+        }
+    }
+}
