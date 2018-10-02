@@ -1,0 +1,53 @@
+// Stage level
+
+pipeline{
+    agent any
+
+    stages{
+        stage('stage_option'){
+            
+            options{
+                timestamps()
+            }
+
+            steps{
+                echo "Hello !!"
+                echo "Hello Again !!"
+            }
+        }
+
+        stage('Test'){
+            steps{
+                echo "Hello from Test stage !!"
+                echo "Hello again from Test stage !!"
+            }
+        }
+    }
+}
+
+//Pipeline level
+
+pipeline{
+    agent any
+
+    options{
+        timestamps()
+    }
+
+    stages{
+
+        stage('stage_option'){
+            steps{
+                echo "Hello !!"
+                echo "Hello Again !!"
+            }
+        }
+
+        stage('Test'){
+            steps{
+                echo "Hello from Test stage !!"
+                echo "Hello again from Test stage !!"
+            }
+        }
+    }
+}
