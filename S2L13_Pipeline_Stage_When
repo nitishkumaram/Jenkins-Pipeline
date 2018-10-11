@@ -1,0 +1,20 @@
+pipeline{
+    agent any
+
+    environment{
+        DEPLOY_TO = 'Prod'
+    }
+
+    stages{
+        stage('Prod Deploy'){
+
+            when{
+                environment name: 'DEPLOY_TO', value: 'Prod'
+            }
+
+            steps{
+                echo 'Deployment in Prod success!!'
+            }
+        }
+    }
+}
