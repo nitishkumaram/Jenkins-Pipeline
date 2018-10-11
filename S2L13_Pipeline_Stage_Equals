@@ -1,0 +1,19 @@
+pipeline{
+    agent any
+
+    environment{
+        some_name = "Jeff"
+    }
+
+    stages{
+        stage('Equals'){
+            when{
+                equals expected: "Jeff", actual: some_name
+            }
+
+            steps{
+                echo "${some_name}"
+            }
+        }
+    }
+}
