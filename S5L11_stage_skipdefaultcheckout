@@ -1,0 +1,18 @@
+pipeline{
+    agent none
+
+    stages{
+        stage('skipdefaultcheckout'){
+
+            agent any
+
+            options{
+                skipDefaultCheckout()
+            }
+
+            steps{
+                echo "skipDefaultCheckout success"
+            }
+        }
+    }
+}
