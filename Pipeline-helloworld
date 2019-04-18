@@ -1,6 +1,9 @@
 pipeline {
     agent {
-        label "Windows"
+        node {
+            label "Windows"
+            customWorkspace "/home/ec2-user/customWorkspace"
+        }
     }
     stages{
         stage('Build'){
