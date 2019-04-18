@@ -15,7 +15,18 @@ pipeline {
             steps{
                 timeout(time: 1, unit: 'SECONDS'){
                     echo "Sleeping in Timeout"
-                    sleep 2
+ //                   sleep 2
+                }
+            }
+        }
+
+        stage('Retry Timeout'){
+            steps{
+                retry(3){
+                    timeout(time: 1, unit: 'SECONDS'){
+                        echo "Sleeping in Timeout"
+                        sleep 2
+                    }
                 }
             }
         }
