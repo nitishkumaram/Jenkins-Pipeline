@@ -1,0 +1,166 @@
+pipeline{
+    agent any
+    
+    environment{
+        DEPLOY_TO = 'Prod'
+    }
+    
+    stages{
+        stage('WhenCondition'){
+            when {
+                environment name: 'DEPLOY_TO', value: 'Prod'
+            }
+
+            steps{
+            echo "Deployment in Prod success!!"
+            }
+        }
+    }
+}
+
+***********************************************************************************
+
+
+pipeline{
+    agent any
+    
+    environment{
+        NAME = 'Nitish'
+    }
+    
+    stages{
+        stage('WhenCondition'){
+            when {
+                equals expected: 'Nitish', actual: NAME
+            }
+
+            steps{
+                echo "Name Matched !!"
+            }
+        }
+    }
+}
+
+***********************************************************************************
+
+pipeline{
+    agent any
+
+    environment{
+        some_name = "Jeff"
+    }
+
+    stages{
+        stage('When Condition'){
+            when{
+                equals expected: "Jeff", actual: some_name
+            }
+
+            steps{
+                echo "${some_name}"
+            }
+        }
+    }
+}
+
+***********************************************************************************
+
+pipeline{
+    agent any
+
+    environment{
+        some_name = "John"
+    }
+
+    stages{
+        stage('Builds') {
+            when{
+                not{
+                    equals expected: "Jeff", actual: some_name
+                }
+            }
+            steps{
+                echo "${some_name}"
+            }
+        }
+    }
+}
+***********************************************************************************
+
+// Pipeline-Stage-When-Expression
+
+pipeline{
+    agent any
+
+    environment{
+        version="1.0"
+    }
+
+    stages{
+        stage('Build'){
+            when{
+                expression{
+                    version == "1.0"
+                }
+            }
+            steps{
+                echo "Buillding ${version}"
+            }
+        }
+    }
+}
+
+***********************************************************************************
+
+// Pipeline-Stage-When-allOF
+
+pipeline{
+    agent any
+
+    environment{
+        version= "1.0"
+        some_name= "Jeff"
+    }
+
+    stages{
+        stage("Build"){
+            when{
+                allOf {
+                    environment name: "version", value: "1.0"
+                    environment name: "some_name", value: "Jeff"
+                }
+            }
+
+            steps{
+                echo "Buillding allOf ${version} ${some_name}"
+            }
+        }
+    }
+}
+
+***********************************************************************************
+
+// Pipeline-Stage-When-anyOf
+
+pipeline{
+    agent any
+
+    environment{
+        version= "2.0"
+        some_name= "jeff"
+    }
+
+    stages{
+        stage('Build'){
+            when{
+                anyOf{
+                    environment name: "version", value: "1.0"
+                    environment name: "some_name", value: "jeff"
+                }
+            }
+            steps{
+                echo "Building anyOf ${version} ${some_name}"
+            }
+        }
+    }
+}
