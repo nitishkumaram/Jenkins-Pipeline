@@ -1,0 +1,30 @@
+pipeline{
+    agent any
+
+    stages{
+        stage('Stages Running in Parallel'){
+            failFast true
+            parallel{
+                stage('Stage1'){
+                    steps{
+                        echo "====++++Stage 1 Executing++++===="
+                        sleep 10
+                    }
+                }
+                stage('Stage2'){
+                    steps{
+                        echo "====++++Stage 2 Executing++++===="
+                        sleep 2
+                        error "Simulating error happened Stage2"
+                    }
+                }
+                stage('Stage3'){
+                    steps{
+                        echo "====++++Stage 3 Executing++++===="
+                        sleep 10
+                    }
+                }
+            }
+        }
+    }
+}
