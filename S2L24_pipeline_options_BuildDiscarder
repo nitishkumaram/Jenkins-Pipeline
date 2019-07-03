@@ -1,0 +1,15 @@
+pipeline{
+    agent any
+
+    options{
+        // Persist artifacts and console output for the specific number of recent Pipeline runs. 
+        buildDiscarder(logRotator(numToKeepStr: '1'))
+    }
+    stages{
+        stage('Build'){
+            steps{
+                echo "====++++Hello World++++===="
+            }
+        }
+    }
+}
