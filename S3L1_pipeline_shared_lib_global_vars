@@ -1,0 +1,19 @@
+// S3L47. Global Libraries
+
+// The underscore will import all the gloabl variables or functions
+@Library("pipeline-shared-lib") _
+
+pipeline{
+    agent any
+    
+    stages{
+        stage('Build'){
+            steps{
+                script{
+                    swissKnife.printName 'John'
+                }
+            }
+        }
+    }
+    
+}
