@@ -1,10 +1,96 @@
-pipeline {
-    agent any
-    stages{
-        stage('Build'){
-            steps{
-                echo "Hello World !!"
-            }
+node{
+    stage('Build'){
+        cleanWs()
+        git url: 'https://github.com/pipelineascodecourse/simple_java_project.git'
+
+        withMaven(maven: 'Maven'){
+            sh "mvn clean install"
         }
+    }
+}
+
+------------------------------------------------------------------------------------
+node{
+    stage('Build'){
+        cleanWs()
+        git url: 'https://github.com/pipelineascodecourse/simple_java_project.git'
+
+        withMaven(maven: 'Maven'){
+            
+            sh "mvn -X clean install"
+
+            // -X parameter will print debugging msg that will let us see which
+            // repository is being used
+            
+        }
+    }
+}
+
+------------------------------------------------------------------------------------
+node{
+    stage('Build'){
+        cleanWs()
+        git url: 'https://github.com/pipelineascodecourse/simple_java_project.git'
+
+        withMaven(maven: 'Maven', mavenSettingsConfig: '73ea8b39-f7f9-4d6d-9802-c2c4120e6f59'){
+            // Here we have specified that we want to take the mvn settings from a 
+                // configuration file that is pre-specified in Manage Jenkins> Managed Files
+
+            sh "mvn -X clean install"
+            
+        }
+    }
+}
+
+------------------------------------------------------------------------------------
+
+There is also another maven settings called Maven settings file path which allow us to 
+specify the location of the Settings.xml that we want to use.
+
+node{
+    stage ('Build'){
+        cleanWs()
+        git url: 'https://github.com/pipelineascodecourse/simple_java_project.git'
+
+        withMaven(
+            maven: 'Maven',
+            mavenSettingsFilePath: '/opt/apache-maven-3.5.2/conf/settings.xml') {
+                sh "mvn -X clean install"
+            }
+    }
+}
+
+------------------------------------------------------------------------------------
+Priority 1 --> mavenLocalRepo
+Priority 2 --> mavenSettingsConfig
+Priority 3 --> mavenSettingsFilePath
+
+node{
+    stage ('Build'){
+        cleanWs()
+        git url: 'https://github.com/pipelineascodecourse/simple_java_project.git'
+
+        withMaven(
+            maven: 'Maven',
+            mavenSettingsFilePath: '/opt/apache-maven-3.5.2/conf/settings.xml',
+            mavenSettingsConfig: '73ea8b39-f7f9-4d6d-9802-c2c4120e6f59',
+            mavenLocalRepo: '/var/lib/jenkins/local_maven_repo') {
+                sh "mvn -X clean install"
+            }
+    }
+}
+------------------------------------------------------------------------------------
+You can disable the Jenkins coverage and artifact by providing options
+
+node{
+    stage ('Build'){
+        cleanWs()
+        git url: 'https://github.com/pipelineascodecourse/simple_java_project.git'
+
+        withMaven(
+            options: [junitPublisher(disable: true), artifactsPublisher(disable: true)],
+            maven: 'Maven') {
+                sh "mvn -X clean install"
+            }
     }
 }
