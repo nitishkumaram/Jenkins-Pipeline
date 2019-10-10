@@ -1,0 +1,11 @@
+node{
+    stage('Build'){
+        cleanWs()
+        git url: 'https://github.com/pipelineascodecourse/simple_java_project_with_jacoco.git'
+
+        withMaven(maven: 'Maven',
+            options: [junitPublisher(disable: false), artifactsPublisher(disabled: false)]){
+                sh "mvn clean install"
+            }
+    }
+}
