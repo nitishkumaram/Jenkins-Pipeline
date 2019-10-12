@@ -14,6 +14,10 @@ node{
 }
 
 // Below code in case we want to fail our build if SonarQube fails
+// In order for SonarQube to inform Jenkins on the status of the quality gate
+// it needs to know how to connect to Jenkins
+// Open SonarQube> Administration> Configuration> Webhooks> Create > Provide name & URL of Jenkins
+// Ensure that it ends with sonarqube-webhook e.g. https://ip:8080/sonarqube-webhook/
 
 node{
     stage('Build'){
