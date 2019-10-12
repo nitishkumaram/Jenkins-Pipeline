@@ -1,0 +1,12 @@
+pipeline{
+    agent any
+    stages{
+        stage('Build'){
+            step{
+                build job: 'build_step_child_job1',
+                    parameters: [[$class: "StringParamterValue",
+                     name: "deployEnv", value: "development env"]]
+            }
+        }
+    }
+}
