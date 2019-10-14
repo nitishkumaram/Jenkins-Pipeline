@@ -2,10 +2,26 @@ pipeline{
     agent any
     stages{
         stage('Build'){
-            step{
-                build job: 'build_step_child_job1',
-                    parameters: [[$class: "StringParamterValue",
-                     name: "deployEnv", value: "development env"]]
+            steps{
+                build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development env"]]
+            }
+        }
+    }
+}
+
+// Child Job
+
+pipeline{
+    agent any
+
+    parameters{
+        string(name: 'deployEnv', description: 'deployment environment')
+    }
+    stages{
+        stage('Build'){
+            steps{
+                echo "child job 1 input param deployEnv: ${params.deployEnv}"
+                echo "child job 1 input param deployEnv: ${deployEnv}"
             }
         }
     }
