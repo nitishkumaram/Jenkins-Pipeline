@@ -1,0 +1,12 @@
+@Library('pipeline-shared-lib@master') _
+
+pipeline{
+    agent any
+    stages{
+        stage('Checkout'){
+            staeps{
+                gitCheckout(branch: master, url: "https://github.com/nitishkumaram/DemoApp.git")
+            }
+        }
+    }
+}
