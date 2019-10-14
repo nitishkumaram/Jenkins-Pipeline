@@ -4,7 +4,7 @@ pipeline{
     agent any
     stages{
         stage('Checkout'){
-            staeps{
+            steps{
                 gitCheckout(branch: master, url: "https://github.com/nitishkumaram/DemoApp.git")
             }
         }
