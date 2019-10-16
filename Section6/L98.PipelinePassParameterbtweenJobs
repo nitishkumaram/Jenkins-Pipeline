@@ -1,15 +1,26 @@
+// You can generate syntax by "build: Build a job> Provide the Project or job name which u want to build."
+// Propagate is an optional parameters that causes the parent job to fail if the child job fails if the value is true
+
 pipeline{
     agent any
     stages{
         stage('Build'){
             steps{
-                build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development env"]]
+                script{
+                    // build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]]
+                    // build job: 'build_step_child_job1', parameters: [string(name: 'deployEnv', value:'123')]
+                    // def buildJobReturnValue = build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], propagate: true
+                    def buildJobReturnValue = build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], propagate: false
+
+                    echo "buildJobReturnValue.result: ${buildJobReturnValue.result}"
+                }   
             }
         }
     }
 }
 
 // Child Job
+
 
 pipeline{
     agent any
@@ -20,8 +31,11 @@ pipeline{
     stages{
         stage('Build'){
             steps{
-                echo "child job 1 input param deployEnv: ${params.deployEnv}"
-                echo "child job 1 input param deployEnv: ${deployEnv}"
+               script{
+                    echo "child job 1 input param deployEnv: ${params.deployEnv}"
+                    echo "child job 1 input param deployEnv: ${deployEnv}"
+                    currentBuild.result = 'FAILURE'
+               }
             }
         }
     }
