@@ -10,7 +10,9 @@ pipeline{
                     // build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]]
                     // build job: 'build_step_child_job1', parameters: [string(name: 'deployEnv', value:'123')]
                     // def buildJobReturnValue = build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], propagate: true
-                    def buildJobReturnValue = build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], propagate: false
+                    // def buildJobReturnValue = build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], propagate: false
+                    build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], quietPeriod: 5, wait: true
+                    build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], quietPeriod: 5, wait: true
 
                     echo "buildJobReturnValue.result: ${buildJobReturnValue.result}"
                 }   
@@ -18,6 +20,24 @@ pipeline{
         }
     }
 }
+
+// the wait parameter tells the parent job to wait for it to finish before executing the following code.
+
+pipeline{
+    agent any
+    stages{
+        stage('Build'){
+            steps{
+                // script{
+                    build job: 'build_step_child_job1', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], quietPeriod: 5, wait: false
+                    build job: 'build_step_child_job2', parameters: [[$class: "StringParameterValue", name: "deployEnv", value: "development parent env"]], quietPeriod: 5, wait: false
+                // }   
+            }
+        }
+    }
+}
+
+
 
 // Child Job
 
@@ -35,7 +55,27 @@ pipeline{
                     echo "child job 1 input param deployEnv: ${params.deployEnv}"
                     echo "child job 1 input param deployEnv: ${deployEnv}"
                     currentBuild.result = 'FAILURE'
+                    // sleep time:5, unit: 'SECONDS'
                }
+            }
+        }
+    }
+}
+
+// child job 2
+
+pipeline{
+    agent any
+
+    parameters{
+        string(name: 'deployEnv', description: 'deployment environment')
+    }
+    stages{
+        stage('Build'){
+            steps{
+                    echo "child job 2 input param deployEnv: ${params.deployEnv}"
+                    echo "child job 2 input param deployEnv: ${deployEnv}"
+                    sleep time:5, unit: 'SECONDS'
             }
         }
     }
